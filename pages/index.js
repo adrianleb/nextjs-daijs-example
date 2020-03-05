@@ -34,7 +34,7 @@ const Index = () => {
           <h3>Loading...</h3>
         </div>
       ) : !web3Connected ? (
-        <button onClick={connectBrowserWallet}>Connect METAMASK</button>
+        <button onClick={connectBrowserWallet}>Connect Wallet</button>
       ) : (
         <div>
           <h3>Connected Account</h3>
