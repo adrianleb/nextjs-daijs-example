@@ -1,23 +1,20 @@
 import React, { useState } from 'react';
 import Head from 'next/head';
 import useMaker from '../hooks/useMaker';
-import { connectBrowserProvider } from '../maker';
 
 const Index = () => {
   const { maker } = useMaker();
   const [daiBalance, setDaiBalance] = useState(null);
-  const [account, setAccount] = useState(null);
+  const [web3Connected, setWeb3Connected] = useState(false);
 
   async function connectBrowserWallet() {
     try {
       if (maker) {
-        const connectedAddress = await connectBrowserProvider(maker);
-        maker.useAccountWithAddress(connectedAddress);
-        setAccount(connectedAddress);
-
+        await maker.authenticate();
+        setWeb3Connected(true);
         const daiBalance = await maker
           .getToken('MDAI')
-          .balanceOf(connectedAddress);
+          .balanceOf(maker.currentAddress());
         setDaiBalance(daiBalance);
       }
     } catch (err) {
@@ -36,16 +33,12 @@ const Index = () => {
         <div>
           <h3>Loading...</h3>
         </div>
-      ) : !account ? (
-        <button
-          onClick={connectBrowserWallet}
-        >
-          Connect METAMASK
-        </button>
+      ) : !web3Connected ? (
+        <button onClick={connectBrowserWallet}>Connect METAMASK</button>
       ) : (
         <div>
           <h3>Connected Account</h3>
-          <p>{account}</p>
+          <p>{maker.currentAddress()}</p>
 
           <div>
             {daiBalance ? (

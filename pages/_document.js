@@ -11,10 +11,8 @@ const scriptTxt = `
 })();
 `;
 
-
 class MyDocument extends Document {
   render() {
-    console.log('ipfs', process.env.IPFS)
     return (
       <Html>
         <Head>
